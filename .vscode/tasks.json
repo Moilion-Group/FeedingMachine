@@ -1,0 +1,42 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "inputs": [
+      {
+        "id": "plcType",
+        "type": "pickString",
+        "description": "请选择PLC类型",
+        "options": ["1500", "plcsim"],
+        "default": "plcsim"
+      },
+      {
+        "id": "ipAddress",
+        "type": "promptString",
+        "description": "请输入PLC的IP地址",
+        "default": "192.168.0.1"
+      },
+      {
+        "id": "downloadMode",
+        "type": "pickString",
+        "description": "请选择下载模式",
+        "options": ["完整下载","直接下载"],
+        "default": "完整下载"
+      },
+      {
+        "id": "checkConfirm",
+        "type": "pickString",
+        "description": "请确认下载",
+        "options": ["确认","取消"],
+        "default": "确认"
+      }
+    ],
+    "tasks": [
+        {
+            "label": "buildAndDownload",
+            "type": "shell",
+            "command": "& { $commonCommand = 'apax build; apax sld load -i ${workspaceFolder}\\bin\\${input:plcType} -t ${input:ipAddress} --accept-security-disclaimer -r'; if ('${input:downloadMode}' -eq '直接下载') { $commonCommand += ' --non-overwriting --mode:delta' }; if ('${input:checkConfirm}' -eq '取消') { exit 1 };  Invoke-Expression $commonCommand  }",
+            "problemMatcher": []
+        }
+    ]         
+}

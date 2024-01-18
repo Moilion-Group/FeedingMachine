@@ -1,0 +1,29 @@
+name: "feedingapp"
+version: 0.0.0
+type: app
+targets:
+  - "1500"
+  - llvm
+  - plcsim
+variables:
+  APAX_BUILD_ARGS:
+    - "--debug"
+devDependencies:
+  "@ax/sdk": 2311.0.1
+installStrategy: overridable
+apaxVersion: 3.1.0
+registries:
+  '@Moilion-Group': 'https://npm.pkg.github.com/'
+dependencies:
+  "@ax/opcua-server-config": ^0.5.0
+  "@ax/simatic-1500-motioncontrol-v7": ^2.0.32
+  "@moilion-group/tankvalvelib": ^0.0.1
+scripts:
+  loadfull:
+    - apax build
+    - apax sld load -t 192.168.0.1 -i ./bin/plcsim  --accept-security-disclaimer
+      -r
+  load:
+    - apax build
+    - apax sld load -t 192.168.0.1  -i ./bin/plcsim --accept-security-disclaimer
+      --non-overwriting --mode:delta
